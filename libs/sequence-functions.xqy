@@ -23,9 +23,9 @@ limitations under the License.
 :)
 
 (:
-	In some cases calling to this library will lessen performance ever so slightly because of the extra little overhead of calling a function.
-	That is why I see this more of a reference library you can copy from but not actually call.
-	With that said there is nothing wrong with using it. During testing, looping 10,000 times it only added 0.02 seconds.
+  Using this library may lessen performance slightly because of the extra little overhead of calling a function.
+  That is why I see this more of a reference library you can copy from but not actually call.
+  With that said there is nothing wrong with using it. During testing, looping 10,000 times I found it only added 0.02 seconds to the results.
 :)
 
 module namespace seq = "http://xquerycoder.blogspot.com/libs/sequence-functions";

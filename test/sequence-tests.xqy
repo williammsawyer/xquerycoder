@@ -2,7 +2,7 @@ xquery version "1.0-ml";
 
 module namespace test = "http://github.com/robwhitby/xray/test";
 import module namespace assert = "http://github.com/robwhitby/xray/assertions" at "/xray/src/assertions.xqy";
-import module namespace seq = "http://xquerycoder.blogspot.com/libs/sequence-functions" at "/libs/sequence-functions.xqy";
+import module namespace seq = "http://www.xquerycoder.com/libs/sequence-functions" at "/libs/sequence-functions.xqy";
 
 declare variable $sequence-full as item()* := (1, 2, 3, 4 ,5 , 6, 7, 8, 9 , 10);
 declare variable $sequence-half as item()* := ( 3, 4, 5, 6, 7, 8 );

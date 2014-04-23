@@ -28,7 +28,7 @@ limitations under the License.
   With that said there is nothing wrong with using it. During testing, looping 10,000 times I found it only added 0.02 seconds to the results.
 :)
 
-module namespace seq = "http://xquerycoder.blogspot.com/libs/sequence-functions";
+module namespace seq = "http://www.xquerycoder.com/libs/sequence-functions";
 
 declare function seq:last($sequence as item()*) as item()? {
 	fn:subsequence($sequence, fn:count($sequence))

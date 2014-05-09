@@ -46,7 +46,7 @@ declare function pretty:styles() {
 		.aName {{ display:inline; color: #F5844C; }}
 		.aName.ns {{ color: #0099CC }}
 		.comment {{ display:block; margin-left: 10px; color: darkgreen; }}
-		.highlight {{ background-color: #FFFBCC; }}
+        .eBlock.highlight, .aBlock.highlight, .comment.highlight {{ background-color: #FFFBCC; }}
 	</style>
 };
 

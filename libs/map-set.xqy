@@ -67,11 +67,31 @@ declare function set:inner($left as map:map, $right as map:map) as map:map {
 	$left * $right
 };
 
+
+(:
+	Map inner join or intersection  on a sequence of maps
+:)
+declare function set:inner($maps as map:map*) as map:map* {
+	if (fn:count($maps) eq 1)
+	then $maps
+	else set:inner($maps[1] , set:inner(fn:tail($maps)))
+};
+
+
 (:
 	left join or what is unique to the left map
 :)
 declare function set:left($left as map:map, $right as map:map) as map:map {
 	$left - $right
+};
+
+(:
+	left join or what is unique to the left map on a sequence of maps
+:)
+declare function set:left($maps as map:map*) as map:map* {
+	if (fn:count($maps) eq 1)
+	then $maps
+	else set:left($maps[1] , set:left(fn:tail($maps)))
 };
 
 (:
@@ -82,6 +102,16 @@ declare function set:right($left as map:map, $right as map:map) as map:map {
 };
 
 (:
+	right join or what is unique to the right map on a sequence of maps
+:)
+declare function set:right($maps as map:map*) as map:map* {
+	if (fn:count($maps) eq 1)
+	then $maps
+	else set:right($maps[fn:last()], set:right(fn:subsequence($maps, 1, fn:count($maps) - 1)))
+};
+
+
+(:
 	left and right joins unioned together
 :)
 declare function set:outer($left as map:map, $right as map:map) as map:map {
@@ -89,8 +119,26 @@ declare function set:outer($left as map:map, $right as map:map) as map:map {
 	($left - $right) + ($right - $left)
 };
 
+(:
+	left and right joins unioned together on two sequence of maps
+:)
+declare function set:outerSequences($left as map:map*, $right as map:map*) as map:map* {
+	set:left($left) + set:right($right)
+};
+
 declare function set:union($left as map:map, $right as map:map) as map:map {
 	$left + $right
+};
+
+
+declare function set:union($maps as map:map*) as map:map* {
+	if (fn:count($maps) eq 1)
+	then $maps
+	else set:union($maps[fn:last()], set:union(fn:tail($maps)))
+};
+
+declare function set:unionSequences($left as map:map*, $right as map:map*) as map:map* {
+	set:union($left) + set:union($right)
 };
 
 (:
@@ -116,11 +164,31 @@ declare function set:inference($left as map:map, $right as map:map) as map:map {
 	$left div $right
 };
 
+
+(:
+	inference on a sequence of maps
+:)
+declare function set:inference($maps as map:map*) as map:map* {
+	if (fn:count($maps) eq 1)
+	then $maps
+	else set:inference($maps[fn:last()], set:inference(fn:tail($maps)))
+};
+
 (:
 	The combination of the reverse and inference between maps. The result is the reversal of the keys in the first map (Map A) and the values in Map B, where a value in Map A matches a key in Map B
 :)
 declare function set:reverse-inference($left as map:map, $right as map:map) as map:map {
 	$left mod $right
+};
+
+
+(:
+	reverse-inference on a sequence of maps
+:)
+declare function set:reverse-inference($maps as map:map*) as map:map* {
+	if (fn:count($maps) eq 1)
+	then $maps
+	else set:reverse-inference($maps[fn:last()], set:reverse-inference(fn:tail($maps)))
 };
 
 declare function set:values($map as map:map) as item()* {

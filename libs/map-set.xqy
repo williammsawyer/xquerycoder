@@ -72,9 +72,7 @@ declare function set:inner($left as map:map, $right as map:map) as map:map {
 	Map inner join or intersection  on a sequence of maps
 :)
 declare function set:inner($maps as map:map*) as map:map* {
-	if (fn:count($maps) eq 1)
-	then $maps
-	else set:inner($maps[1] , set:inner(fn:tail($maps)))
+	fn:fold-left(set:inner(?, ?), $maps[1], $maps)
 };
 
 
@@ -89,9 +87,7 @@ declare function set:left($left as map:map, $right as map:map) as map:map {
 	left join or what is unique to the left map on a sequence of maps
 :)
 declare function set:left($maps as map:map*) as map:map* {
-	if (fn:count($maps) eq 1)
-	then $maps
-	else set:left($maps[1] , set:left(fn:tail($maps)))
+	fn:fold-left(set:left(?, ?), $maps[1], $maps)
 };
 
 (:
@@ -105,9 +101,7 @@ declare function set:right($left as map:map, $right as map:map) as map:map {
 	right join or what is unique to the right map on a sequence of maps
 :)
 declare function set:right($maps as map:map*) as map:map* {
-	if (fn:count($maps) eq 1)
-	then $maps
-	else set:right($maps[fn:last()], set:right(fn:subsequence($maps, 1, fn:count($maps) - 1)))
+	fn:fold-right(set:right(?, ?), $maps, $maps[1])
 };
 
 
@@ -132,9 +126,7 @@ declare function set:union($left as map:map, $right as map:map) as map:map {
 
 
 declare function set:union($maps as map:map*) as map:map* {
-	if (fn:count($maps) eq 1)
-	then $maps
-	else set:union($maps[fn:last()], set:union(fn:tail($maps)))
+	fn:fold-left(set:union(?, ?), $maps[1], $maps)
 };
 
 declare function set:unionSequences($left as map:map*, $right as map:map*) as map:map* {
@@ -169,9 +161,7 @@ declare function set:inference($left as map:map, $right as map:map) as map:map {
 	inference on a sequence of maps
 :)
 declare function set:inference($maps as map:map*) as map:map* {
-	if (fn:count($maps) eq 1)
-	then $maps
-	else set:inference($maps[fn:last()], set:inference(fn:tail($maps)))
+	fn:fold-left(set:inference(?, ?), $maps[1], $maps)
 };
 
 (:
@@ -186,9 +176,7 @@ declare function set:reverse-inference($left as map:map, $right as map:map) as m
 	reverse-inference on a sequence of maps
 :)
 declare function set:reverse-inference($maps as map:map*) as map:map* {
-	if (fn:count($maps) eq 1)
-	then $maps
-	else set:reverse-inference($maps[fn:last()], set:reverse-inference(fn:tail($maps)))
+	fn:fold-left(set:reverse-inference(?, ?), $maps[1], $maps)
 };
 
 declare function set:values($map as map:map) as item()* {

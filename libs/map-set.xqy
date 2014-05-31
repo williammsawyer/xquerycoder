@@ -87,7 +87,15 @@ declare function set:left($left as map:map, $right as map:map) as map:map {
 	left join or what is unique to the left map on a sequence of maps
 :)
 declare function set:left($maps as map:map*) as map:map* {
-	fn:fold-left(set:left(?, ?), $maps[1], $maps)
+	fn:fold-right(
+        function($left, $right){
+            if ( fn:exists($right) ) then (
+                set:left($left, $right)
+            ) else ( $left )
+        },
+        (),
+        $maps
+    )
 };
 
 (:
@@ -101,7 +109,15 @@ declare function set:right($left as map:map, $right as map:map) as map:map {
 	right join or what is unique to the right map on a sequence of maps
 :)
 declare function set:right($maps as map:map*) as map:map* {
-	fn:fold-right(set:right(?, ?), $maps, $maps[1])
+    fn:fold-right(
+        function($left, $right){
+            if ( fn:exists($right)) then (
+                set:right($left, $right)
+            ) else ( $left)
+        },
+        (),
+        $maps
+    )
 };
 
 
@@ -126,7 +142,7 @@ declare function set:union($left as map:map, $right as map:map) as map:map {
 
 
 declare function set:union($maps as map:map*) as map:map* {
-	fn:fold-left(set:union(?, ?), $maps[1], $maps)
+	fn:fold-left(set:union(?, ?), map:map(), $maps)
 };
 
 declare function set:unionSequences($left as map:map*, $right as map:map*) as map:map* {
@@ -161,7 +177,15 @@ declare function set:inference($left as map:map, $right as map:map) as map:map {
 	inference on a sequence of maps
 :)
 declare function set:inference($maps as map:map*) as map:map* {
-	fn:fold-left(set:inference(?, ?), $maps[1], $maps)
+    fn:fold-right(
+        function($left, $right){
+            if ( fn:exists($right)) then (
+                set:inference($left, $right)
+            ) else ( $left)
+        },
+        (),
+        $maps
+    )
 };
 
 (:
@@ -176,7 +200,15 @@ declare function set:reverse-inference($left as map:map, $right as map:map) as m
 	reverse-inference on a sequence of maps
 :)
 declare function set:reverse-inference($maps as map:map*) as map:map* {
-	fn:fold-left(set:reverse-inference(?, ?), $maps[1], $maps)
+    fn:fold-right(
+            function($left, $right){
+                if ( fn:exists($right)) then (
+                    set:reverse-inference($left, $right)
+                ) else ( $left)
+            },
+            (),
+            $maps
+    )
 };
 
 declare function set:values($map as map:map) as item()* {

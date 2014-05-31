@@ -147,3 +147,66 @@ declare %test:case function extend-test() {
 		)
 	)
 };
+
+declare %test:case function inner-test-fold() {
+    let $inner := set:inner(($left, $right))
+    let $keys := map:keys($inner)
+    return (
+        assert:equal(map:count($inner), 3),
+        for $key in $keys
+        return (
+            assert:true($key = ("3", "4", "9"))
+        )
+    )
+};
+
+declare %test:case function left-test-fold() {
+    let $left := set:left(($left, $right))
+    let $keys := map:keys($left)
+    return (
+        assert:equal(map:count($left), 2),
+        for $key in $keys
+        return (
+            assert:true($key = ("1", "7")),
+            assert:false($key = ("2", "5", "6", "8", "10"))
+        )
+    )
+};
+
+declare %test:case function right-test-fold() {
+    let $right := set:right(($left, $right))
+    let $keys := map:keys($right)
+    return (
+        assert:equal(map:count($right), 5),
+        for $key in $keys
+        return (
+            assert:true($key = ("2", "5", "6", "8", "10")),
+            assert:false($key = ("1", "7"))
+        )
+    )
+};
+
+declare %test:case function outer-test-fold() {
+    let $outer := set:outerSequences(($left,$right), ($left,$right))
+    let $keys := map:keys($outer)
+    return (
+        assert:equal(map:count($outer), 7),
+        for $key in $keys
+        return (
+            assert:true($key = ("1", "7", "2", "5", "6", "8", "10")),
+            assert:false($key = ("3", "4", "9"))
+        )
+    )
+};
+
+declare %test:case function union-test-fold() {
+    let $union := set:union(($left, $right))
+    let $keys := map:keys($union)
+    return (
+        assert:equal(map:count($union), 10),
+        for $key in $keys
+        return (
+            assert:true($key = ("1", "7", "2", "5", "6", "8", "10", "3", "4", "9"))
+        )
+    )
+};
